@@ -100,12 +100,6 @@ export default function ProfilePage() {
                 <p className="text-xs text-slate-500 mt-0.5 font-medium">{user.designation}</p>
               </div>
             </div>
-
-            <div className="flex sm:flex-col items-center sm:items-end gap-2">
-              <span className="text-xs text-slate-500 font-mono font-medium">
-                Employee ID: {user.id}
-              </span>
-            </div>
           </div>
 
           {/* Details Grid (Light Theme) */}

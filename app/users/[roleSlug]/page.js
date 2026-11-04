@@ -234,7 +234,7 @@ export default function RoleUsersManagementPage() {
 
                     return (
                       <tr key={u.id} className="hover:bg-slate-50/80 transition-colors">
-                        {/* Employee Name & ID */}
+                        {/* Employee Name */}
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 font-bold flex items-center justify-center shrink-0 text-xs">
@@ -242,9 +242,6 @@ export default function RoleUsersManagementPage() {
                             </div>
                             <div>
                               <div className="font-bold text-slate-900">{u.name}</div>
-                              <div className="text-[11px] text-slate-400 font-mono">
-                                ID: {u.id.substring(0, 8)}
-                              </div>
                             </div>
                           </div>
                         </td>

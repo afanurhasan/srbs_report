@@ -169,9 +169,6 @@ export default function ReportDetailPage() {
               <div className="text-base font-bold text-slate-900 font-mono">
                 {formatDate(report.date)}
               </div>
-              <div className="text-[10px] text-slate-400 mt-0.5 font-medium">
-                ID: {report.id}
-              </div>
             </div>
           </div>
 
