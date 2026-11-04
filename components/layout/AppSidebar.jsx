@@ -117,12 +117,12 @@ export default function AppSidebar({ isOpen, onClose }) {
         }`}
       >
         {/* Company Brand at top of Sidebar */}
-        <div className="px-4 py-3 border-b border-slate-200 bg-white flex items-center justify-between min-h-[64px]">
-          <Link href="/dashboard" className="flex items-center">
+        <div className="relative px-3 border-b border-slate-200 bg-white flex items-center justify-center h-16 shrink-0">
+          <Link href="/dashboard" className="flex items-center justify-center w-full">
             <img
               src="/navlogo.jpeg"
               alt="SRBS Admixture and Paint Company"
-              className="h-10 sm:h-11 w-auto max-h-12 max-w-[190px] object-contain"
+              className="h-11 sm:h-12 w-auto max-w-[215px] object-contain mx-auto"
               onError={(e) => {
                 if (e.target.src.endsWith('/navlogo.jpeg')) {
                   e.target.src = '/navlogo.jpg';
@@ -136,7 +136,7 @@ export default function AppSidebar({ isOpen, onClose }) {
           </Link>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 lg:hidden ml-auto"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 lg:hidden"
             aria-label="Close Sidebar"
           >
             <X className="w-5 h-5" />
