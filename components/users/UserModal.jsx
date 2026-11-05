@@ -194,8 +194,7 @@ export default function UserModal({
               <option value={ROLES.REGIONAL_SALES_MANAGER}>3. Regional Sales Manager (RSM)</option>
               <option value={ROLES.AREA_SALES_MANAGER}>4. Area Sales Manager (ASM)</option>
               <option value={ROLES.TERRITORY_SALES_MANAGER}>5. Territory Sales Manager (TSM)</option>
-              <option value={ROLES.SENIOR_SALES_EXECUTIVE}>6. Senior Sales Executive (SSE)</option>
-              <option value={ROLES.SALES_EXECUTIVE}>7. Sales Executive (SE) — Submits Reports</option>
+              <option value={ROLES.SALES_EXECUTIVE}>6. Sales Executive (SE) — Submits Reports</option>
             </select>
           </div>
 

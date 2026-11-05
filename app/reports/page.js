@@ -20,6 +20,7 @@ import {
   Download,
   Building,
   Package,
+  Truck,
   DollarSign,
   Users,
   CheckCircle2,
@@ -64,7 +65,6 @@ export default function ReportsListPage() {
   const [selectedRsm, setSelectedRsm] = useState('');
   const [selectedAsm, setSelectedAsm] = useState('');
   const [selectedTsm, setSelectedTsm] = useState('');
-  const [selectedSse, setSelectedSse] = useState('');
   const [selectedSe, setSelectedSe] = useState('');
 
   // Month & Year state (Default: November 2026)
@@ -111,7 +111,6 @@ export default function ReportsListPage() {
     let initRsm = '';
     let initAsm = '';
     let initTsm = '';
-    let initSse = '';
     let initSe = '';
 
     if (isAdmin) {
@@ -133,13 +132,8 @@ export default function ReportsListPage() {
       );
       initTsm = firstTsm ? firstTsm.id : '';
 
-      const firstSse = users.find(
-        (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === initTsm
-      );
-      initSse = firstSse ? firstSse.id : '';
-
       const firstSe = users.find(
-        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initSse
+        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initTsm
       );
       initSe = firstSe ? firstSe.id : '';
     } else if (user.role === ROLES.NATIONAL_SALES_MANAGER) {
@@ -156,12 +150,8 @@ export default function ReportsListPage() {
         (u) => u.role === ROLES.TERRITORY_SALES_MANAGER && u.parentId === initAsm
       );
       initTsm = firstTsm ? firstTsm.id : '';
-      const firstSse = users.find(
-        (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === initTsm
-      );
-      initSse = firstSse ? firstSse.id : '';
       const firstSe = users.find(
-        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initSse
+        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initTsm
       );
       initSe = firstSe ? firstSe.id : '';
     } else if (user.role === ROLES.REGIONAL_SALES_MANAGER) {
@@ -175,12 +165,8 @@ export default function ReportsListPage() {
         (u) => u.role === ROLES.TERRITORY_SALES_MANAGER && u.parentId === initAsm
       );
       initTsm = firstTsm ? firstTsm.id : '';
-      const firstSse = users.find(
-        (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === initTsm
-      );
-      initSse = firstSse ? firstSse.id : '';
       const firstSe = users.find(
-        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initSse
+        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initTsm
       );
       initSe = firstSe ? firstSe.id : '';
     } else if (user.role === ROLES.AREA_SALES_MANAGER) {
@@ -191,12 +177,8 @@ export default function ReportsListPage() {
         (u) => u.role === ROLES.TERRITORY_SALES_MANAGER && u.parentId === initAsm
       );
       initTsm = firstTsm ? firstTsm.id : '';
-      const firstSse = users.find(
-        (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === initTsm
-      );
-      initSse = firstSse ? firstSse.id : '';
       const firstSe = users.find(
-        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initSse
+        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initTsm
       );
       initSe = firstSe ? firstSe.id : '';
     } else if (user.role === ROLES.TERRITORY_SALES_MANAGER) {
@@ -204,28 +186,13 @@ export default function ReportsListPage() {
       initAsm = user.parentId;
       initRsm = getAncestorId(user.id, ROLES.REGIONAL_SALES_MANAGER);
       initNsm = getAncestorId(user.id, ROLES.NATIONAL_SALES_MANAGER);
-      const firstSse = users.find(
-        (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === initTsm
-      );
-      initSse = firstSse ? firstSse.id : '';
       const firstSe = users.find(
-        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initSse
-      );
-      initSe = firstSe ? firstSe.id : '';
-    } else if (user.role === ROLES.SENIOR_SALES_EXECUTIVE) {
-      initSse = user.id;
-      initTsm = user.parentId;
-      initAsm = getAncestorId(user.id, ROLES.AREA_SALES_MANAGER);
-      initRsm = getAncestorId(user.id, ROLES.REGIONAL_SALES_MANAGER);
-      initNsm = getAncestorId(user.id, ROLES.NATIONAL_SALES_MANAGER);
-      const firstSe = users.find(
-        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initSse
+        (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === initTsm
       );
       initSe = firstSe ? firstSe.id : '';
     } else if (user.role === ROLES.SALES_EXECUTIVE) {
       initSe = user.id;
-      initSse = user.parentId;
-      initTsm = getAncestorId(user.id, ROLES.TERRITORY_SALES_MANAGER);
+      initTsm = user.parentId;
       initAsm = getAncestorId(user.id, ROLES.AREA_SALES_MANAGER);
       initRsm = getAncestorId(user.id, ROLES.REGIONAL_SALES_MANAGER);
       initNsm = getAncestorId(user.id, ROLES.NATIONAL_SALES_MANAGER);
@@ -235,7 +202,6 @@ export default function ReportsListPage() {
     setSelectedRsm(initRsm);
     setSelectedAsm(initAsm);
     setSelectedTsm(initTsm);
-    setSelectedSse(initSse);
     setSelectedSe(initSe);
 
     // Automatically execute the initial search for this default chain
@@ -282,24 +248,14 @@ export default function ReportsListPage() {
     [users, selectedAsm]
   );
 
-  const sseOptions = useMemo(
-    () =>
-      users.filter(
-        (u) =>
-          u.role === ROLES.SENIOR_SALES_EXECUTIVE &&
-          (!selectedTsm || u.parentId === selectedTsm)
-      ),
-    [users, selectedTsm]
-  );
-
   const seOptions = useMemo(
     () =>
       users.filter(
         (u) =>
           u.role === ROLES.SALES_EXECUTIVE &&
-          (!selectedSse || u.parentId === selectedSse)
+          (!selectedTsm || u.parentId === selectedTsm)
       ),
-    [users, selectedSse]
+    [users, selectedTsm]
   );
 
   // Cascading Change Handlers: when a parent changes, auto-pick its first subordinate
@@ -323,14 +279,8 @@ export default function ReportsListPage() {
     const nextTsm = subTsms[0]?.id || '';
     setSelectedTsm(nextTsm);
 
-    const subSses = users.filter(
-      (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === nextTsm
-    );
-    const nextSse = subSses[0]?.id || '';
-    setSelectedSse(nextSse);
-
     const subSes = users.filter(
-      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === nextSse
+      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === nextTsm
     );
     const nextSe = subSes[0]?.id || '';
     setSelectedSe(nextSe);
@@ -350,14 +300,8 @@ export default function ReportsListPage() {
     const nextTsm = subTsms[0]?.id || '';
     setSelectedTsm(nextTsm);
 
-    const subSses = users.filter(
-      (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === nextTsm
-    );
-    const nextSse = subSses[0]?.id || '';
-    setSelectedSse(nextSse);
-
     const subSes = users.filter(
-      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === nextSse
+      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === nextTsm
     );
     const nextSe = subSes[0]?.id || '';
     setSelectedSe(nextSe);
@@ -371,14 +315,8 @@ export default function ReportsListPage() {
     const nextTsm = subTsms[0]?.id || '';
     setSelectedTsm(nextTsm);
 
-    const subSses = users.filter(
-      (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === nextTsm
-    );
-    const nextSse = subSses[0]?.id || '';
-    setSelectedSse(nextSse);
-
     const subSes = users.filter(
-      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === nextSse
+      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === nextTsm
     );
     const nextSe = subSes[0]?.id || '';
     setSelectedSe(nextSe);
@@ -386,23 +324,8 @@ export default function ReportsListPage() {
 
   const handleTsmChange = (newTsmId) => {
     setSelectedTsm(newTsmId);
-    const subSses = users.filter(
-      (u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE && u.parentId === newTsmId
-    );
-    const nextSse = subSses[0]?.id || '';
-    setSelectedSse(nextSse);
-
     const subSes = users.filter(
-      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === nextSse
-    );
-    const nextSe = subSes[0]?.id || '';
-    setSelectedSe(nextSe);
-  };
-
-  const handleSseChange = (newSseId) => {
-    setSelectedSse(newSseId);
-    const subSes = users.filter(
-      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === newSseId
+      (u) => u.role === ROLES.SALES_EXECUTIVE && u.parentId === newTsmId
     );
     const nextSe = subSes[0]?.id || '';
     setSelectedSe(nextSe);
@@ -616,12 +539,12 @@ export default function ReportsListPage() {
                 </h3>
               </div>
               <span className="text-[11px] text-slate-500 font-medium">
-                Step-by-step drilldown (NSM &rarr; RSM &rarr; ASM &rarr; TSM &rarr; SSE &rarr; SE)
+                Step-by-step drilldown (NSM &rarr; RSM &rarr; ASM &rarr; TSM &rarr; SE)
               </span>
             </div>
 
-            {/* 6 Cascading Dropdowns Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+            {/* 5 Cascading Dropdowns Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
               {/* 1. NSM */}
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-slate-600 uppercase flex items-center gap-1">
@@ -705,10 +628,7 @@ export default function ReportsListPage() {
                 </label>
                 <select
                   value={selectedTsm}
-                  disabled={
-                    user.role === ROLES.SENIOR_SALES_EXECUTIVE ||
-                    user.role === ROLES.TERRITORY_SALES_MANAGER
-                  }
+                  disabled={user.role === ROLES.TERRITORY_SALES_MANAGER}
                   onChange={(e) => handleTsmChange(e.target.value)}
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-75 disabled:bg-slate-100"
                 >
@@ -721,34 +641,11 @@ export default function ReportsListPage() {
                 </select>
               </div>
 
-              {/* 5. SSE */}
-              <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-600 uppercase flex items-center gap-1">
-                  <span className="w-4 h-4 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px]">
-                    5
-                  </span>
-                  SSE
-                </label>
-                <select
-                  value={selectedSse}
-                  disabled={user.role === ROLES.SENIOR_SALES_EXECUTIVE}
-                  onChange={(e) => handleSseChange(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-75 disabled:bg-slate-100"
-                >
-                  <option value="">-- Select SSE --</option>
-                  {sseOptions.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* 6. SE (Sales Executive) */}
+              {/* 5. SE (Sales Executive) */}
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-blue-700 uppercase flex items-center gap-1">
                   <span className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">
-                    6
+                    5
                   </span>
                   SE (Field Force)
                 </label>

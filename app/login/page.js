@@ -240,27 +240,17 @@ export default function LoginPage() {
                       <div className="text-[10px] font-bold text-blue-700 uppercase">5. TSM</div>
                       <div className="text-xs text-slate-800 font-semibold truncate">Nusrat J.</div>
                     </button>
-
-                    {/* SSE */}
-                    <button
-                      type="button"
-                      onClick={() => handleQuickLogin(SEED_USERS[5])}
-                      className="p-2 rounded-xl bg-amber-50/70 border border-amber-200 hover:bg-amber-100 text-left transition-all"
-                    >
-                      <div className="text-[10px] font-bold text-amber-700 uppercase">6. SSE</div>
-                      <div className="text-xs text-slate-800 font-semibold truncate">Ariful Islam</div>
-                    </button>
                   </div>
 
                   {/* SE (Sales Executive - Submits Reports) */}
                   <button
                     type="button"
-                    onClick={() => handleQuickLogin(SEED_USERS[6])}
+                    onClick={() => handleQuickLogin(SEED_USERS[5])}
                     className="w-full p-2.5 rounded-xl bg-emerald-50/80 border border-emerald-300 hover:bg-emerald-100/90 text-left transition-all flex items-center justify-between group"
                   >
                     <div>
                       <div className="text-[10px] font-bold text-emerald-800 uppercase flex items-center gap-1.5">
-                        <span>7. Sales Executive (SE)</span>
+                        <span>6. Sales Executive (SE)</span>
                         <span className="px-1.5 py-0.5 rounded bg-emerald-200 text-emerald-900 text-[9px] font-bold">
                           Submits Reports
                         </span>

@@ -178,7 +178,6 @@ export default function UsersManagementPage() {
               <option value={ROLES.REGIONAL_SALES_MANAGER}>Regional Sales Manager (RSM)</option>
               <option value={ROLES.AREA_SALES_MANAGER}>Area Sales Manager (ASM)</option>
               <option value={ROLES.TERRITORY_SALES_MANAGER}>Territory Sales Manager (TSM)</option>
-              <option value={ROLES.SENIOR_SALES_EXECUTIVE}>Senior Sales Executive (SSE)</option>
               <option value={ROLES.SALES_EXECUTIVE}>Sales Executive (SE)</option>
             </select>
           </div>
@@ -225,8 +224,6 @@ export default function UsersManagementPage() {
                                 ? 'bg-purple-50 text-purple-700 border-purple-200'
                                 : isSe
                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                : u.role === ROLES.SENIOR_SALES_EXECUTIVE
-                                ? 'bg-amber-50 text-amber-800 border-amber-200'
                                 : 'bg-blue-50 text-blue-700 border-blue-200'
                             }`}
                           >

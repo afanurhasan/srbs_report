@@ -37,7 +37,6 @@ export default function AdminDashboard({ user, reports, allUsers }) {
     [ROLES.REGIONAL_SALES_MANAGER]: allUsers.filter((u) => u.role === ROLES.REGIONAL_SALES_MANAGER).length,
     [ROLES.AREA_SALES_MANAGER]: allUsers.filter((u) => u.role === ROLES.AREA_SALES_MANAGER).length,
     [ROLES.TERRITORY_SALES_MANAGER]: allUsers.filter((u) => u.role === ROLES.TERRITORY_SALES_MANAGER).length,
-    [ROLES.SENIOR_SALES_EXECUTIVE]: allUsers.filter((u) => u.role === ROLES.SENIOR_SALES_EXECUTIVE).length,
     [ROLES.SALES_EXECUTIVE]: allUsers.filter((u) => u.role === ROLES.SALES_EXECUTIVE).length,
   };
 
@@ -46,7 +45,6 @@ export default function AdminDashboard({ user, reports, allUsers }) {
     { slug: 'rsm', role: ROLES.REGIONAL_SALES_MANAGER },
     { slug: 'asm', role: ROLES.AREA_SALES_MANAGER },
     { slug: 'tsm', role: ROLES.TERRITORY_SALES_MANAGER },
-    { slug: 'sse', role: ROLES.SENIOR_SALES_EXECUTIVE },
     { slug: 'se', role: ROLES.SALES_EXECUTIVE },
   ];
 
@@ -118,7 +116,7 @@ export default function AdminDashboard({ user, reports, allUsers }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
           {salesRolesList.map(({ slug, role }) => {
             const count = roleCounts[role] || 0;
 

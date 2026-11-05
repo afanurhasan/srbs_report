@@ -39,8 +39,7 @@ Admin (System Administrator)
         └── Regional Sales Manager (RSM)
               └── Area Sales Manager (ASM)
                     └── Territory Sales Manager (TSM)
-                          └── Senior Sales Executive (SSE)
-                                └── Sales Executive (SE) [Field Operations & Daily Reporting]
+                          └── Sales Executive (SE) [Field Operations & Daily Reporting]
 ```
 
 ---
@@ -48,19 +47,19 @@ Admin (System Administrator)
 ## 📊 Core Features
 
 1. **Step-by-Step Cascading Report Drilldown**:
-   - NSM &rarr; RSM &rarr; ASM &rarr; TSM &rarr; SSE &rarr; SE dynamic selection.
+   - NSM &rarr; RSM &rarr; ASM &rarr; TSM &rarr; SE dynamic selection.
    - Month & Year selector with instant Day-to-Day register generation.
 
-2. **22-Field Daily Report Register**:
+2. **Daily Report Register**:
    - Date, Route today, Visits breakdown (Dealer, Retail, Mason, Painter, Site, Total auto).
-   - Product orders (Admixture, Sealer, Total auto, Memo no).
-   - Deliveries & collections (Deliv Adm, Deliv Slr, Total auto, Delivery value Tk, Collection today Tk, Total due Tk).
-   - Stock tracking & field notes (Stock Admixture, Stock Sealer, Tomorrow route/plan, Problem/support needed).
-   - Sticky Actions (View & Edit) next to Date for quick mobile access.
+   - Product orders (Admixture, Sealer, Total auto).
+   - Deliveries & collections (Deliv Adm, Deliv Slr, Total auto, Delivery value Tk, Collection From, Collected Amount Tk).
+   - Problem / support needed field notes.
+   - Sticky Actions next to Date for quick mobile access.
 
 3. **Monthly Grand Totals & Analytics**:
-   - Cumulative monthly summary row calculating visits, order volume, deliveries, cash collection, and closing stock.
-   - Monthly CSV Export with all 22 client columns.
+   - Cumulative monthly summary row calculating visits, order volume, deliveries, and collections.
+   - Monthly CSV Export.
 
 4. **100% Mobile Responsive**:
    - Optimized for smartphones, tablets, laptops, and wide monitors.

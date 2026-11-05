@@ -26,6 +26,7 @@ import {
   Award,
   Send,
   Droplets,
+  ReceiptText,
 } from 'lucide-react';
 
 export default function AppSidebar({ isOpen, onClose }) {
@@ -50,7 +51,6 @@ export default function AppSidebar({ isOpen, onClose }) {
     rsm: Building2,
     asm: Compass,
     tsm: MapPin,
-    sse: Award,
     se: Send,
   };
 
@@ -60,7 +60,6 @@ export default function AppSidebar({ isOpen, onClose }) {
     rsm: 'bg-indigo-100 text-indigo-800 border-indigo-200',
     asm: 'bg-teal-100 text-teal-800 border-teal-200',
     tsm: 'bg-cyan-100 text-cyan-800 border-cyan-200',
-    sse: 'bg-amber-100 text-amber-800 border-amber-200',
     se: 'bg-emerald-100 text-emerald-800 border-emerald-200',
   };
 
@@ -194,7 +193,7 @@ export default function AppSidebar({ isOpen, onClose }) {
                 </span>
               </div>
 
-              {/* Individual Dedicated Role Links (NSM, RSM, ASM, TSM, SSE, SE) */}
+              {/* Individual Dedicated Role Links (NSM, RSM, ASM, TSM, SE) */}
               {visibleRoleLinks.map((roleItem) => {
                 const targetHref = `/users/${roleItem.slug}`;
                 const isActive = pathname === targetHref;
@@ -237,6 +236,78 @@ export default function AppSidebar({ isOpen, onClose }) {
                   </Link>
                 );
               })}
+            </div>
+          )}
+
+          {/* Invoice Management Section (Admin Only) */}
+          {isAdmin && (
+            <div className="space-y-1 pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <span>Invoicing</span>
+                <span className="text-[9px] font-mono bg-red-50 text-red-700 px-1.5 py-0.2 rounded border border-red-200 font-bold">
+                  Admin
+                </span>
+              </div>
+
+              <Link
+                href="/invoices/new"
+                onClick={onClose}
+                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all group ${
+                  pathname === '/invoices/new'
+                    ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-sm shadow-red-600/30'
+                    : 'text-slate-700 hover:text-red-700 hover:bg-red-50/70'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
+                      pathname === '/invoices/new'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-red-100 text-red-700 group-hover:bg-red-200'
+                    }`}
+                  >
+                    <PlusCircle className="w-4 h-4" />
+                  </div>
+                  <span>Create Invoice</span>
+                </div>
+                <ChevronRight
+                  className={`w-4 h-4 transition-transform ${
+                    pathname === '/invoices/new'
+                      ? 'text-white'
+                      : 'text-slate-400 group-hover:translate-x-0.5'
+                  }`}
+                />
+              </Link>
+
+              <Link
+                href="/invoices"
+                onClick={onClose}
+                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all group ${
+                  pathname === '/invoices'
+                    ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
+                    : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
+                      pathname === '/invoices'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-slate-100 text-slate-700 group-hover:bg-slate-200'
+                    }`}
+                  >
+                    <ReceiptText className="w-4 h-4" />
+                  </div>
+                  <span>Invoices</span>
+                </div>
+                <ChevronRight
+                  className={`w-4 h-4 transition-transform ${
+                    pathname === '/invoices'
+                      ? 'text-white'
+                      : 'text-slate-400 group-hover:translate-x-0.5'
+                  }`}
+                />
+              </Link>
             </div>
           )}
         </div>

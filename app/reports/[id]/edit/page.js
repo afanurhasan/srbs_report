@@ -54,7 +54,7 @@ export default function EditReportPage() {
     );
   }
 
-  // Enforce permission: Only author if SE, or Admin can edit. Managers are read-only.
+  // Enforce permission: Only Admin can edit submitted reports.
   const hasEditPermission = canEditReport(user, report);
 
   if (!hasEditPermission) {
@@ -66,8 +66,7 @@ export default function EditReportPage() {
           </div>
           <h2 className="text-xl font-bold text-slate-900 mb-2">Editing Restricted</h2>
           <p className="text-xs text-slate-600 mb-6 leading-relaxed font-medium">
-            Company policy dictates that management roles (<span className="text-blue-700 font-bold">{user?.role}</span>) are strictly read-only.
-            Only the submitting Sales Executive ({report.employeeName}) or System Admin can edit this report.
+            Submitted daily sales reports cannot be edited once submitted. Only the System Administrator has permission to edit submitted reports.
           </p>
           <button
             onClick={() => router.push(`/reports/${id}`)}

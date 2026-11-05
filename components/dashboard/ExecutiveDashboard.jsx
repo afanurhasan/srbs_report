@@ -61,16 +61,9 @@ export default function ExecutiveDashboard({ user, reports, supervisor }) {
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
             <Link
               href={`/reports/${todayReport.id}`}
-              className="flex-1 sm:flex-initial text-center px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors"
+              className="w-full sm:w-auto text-center px-4 py-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-2xs transition-colors"
             >
               View Report
-            </Link>
-            <Link
-              href={`/reports/${todayReport.id}/edit`}
-              className="flex-1 sm:flex-initial justify-center px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white flex items-center gap-1.5 shadow-sm shadow-emerald-600/30 transition-colors"
-            >
-              <Edit2 className="w-3.5 h-3.5" />
-              <span>Edit Report</span>
             </Link>
           </div>
         </div>
@@ -155,9 +148,9 @@ export default function ExecutiveDashboard({ user, reports, supervisor }) {
 
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-              <span className="text-xs text-slate-500 font-semibold">Immediate Supervisor (SSE)</span>
+              <span className="text-xs text-slate-500 font-semibold">Immediate Supervisor (TSM)</span>
               <p className="text-sm font-bold text-slate-900">
-                {supervisor ? supervisor.name : 'Senior Sales Executive'}
+                {supervisor ? supervisor.name : 'Territory Sales Manager'}
               </p>
               {supervisor && (
                 <p className="text-xs text-slate-600 font-mono font-medium">
@@ -227,13 +220,6 @@ export default function ExecutiveDashboard({ user, reports, supervisor }) {
                         title="View"
                       >
                         <Eye className="w-4 h-4" />
-                      </Link>
-                      <Link
-                        href={`/reports/${r.id}/edit`}
-                        className="p-1.5 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 transition-colors"
-                        title="Edit"
-                      >
-                        <Edit2 className="w-4 h-4" />
                       </Link>
                     </div>
                   </div>
