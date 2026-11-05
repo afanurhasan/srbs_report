@@ -238,9 +238,6 @@ export default function ReportDetailPage() {
                   <Package className="w-3.5 h-3.5" />
                   Product Orders (Litres)
                 </span>
-                <span className="text-xs font-mono font-semibold text-slate-500">
-                  Memo: {report.memoNo}
-                </span>
               </div>
 
               <div className="space-y-2 text-xs">
@@ -296,49 +293,32 @@ export default function ReportDetailPage() {
             </div>
           </div>
 
-          {/* 4. Financials & Stock Status */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+          {/* 4. Financial Collections */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-              <span className="text-[11px] text-slate-500 font-semibold">Delivery value (Tk)</span>
+              <span className="text-[11px] text-slate-500 font-semibold">16. Delivery value (Tk)</span>
               <div className="text-base font-extrabold text-slate-900 font-mono mt-1">
                 {formatTaka(report.deliveryValue)}
               </div>
             </div>
 
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-              <span className="text-[11px] text-emerald-700 font-semibold">Collection today (Tk)</span>
+              <span className="text-[11px] text-slate-700 font-semibold">17. Collection From</span>
+              <div className="text-sm font-extrabold text-slate-900 mt-1 truncate" title={report.collectionFrom}>
+                {report.collectionFrom || 'Not specified'}
+              </div>
+            </div>
+
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+              <span className="text-[11px] text-emerald-700 font-semibold">18. Collected Amount (Tk)</span>
               <div className="text-base font-extrabold text-emerald-700 font-mono mt-1">
-                {formatTaka(report.collectionToday)}
-              </div>
-            </div>
-
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-              <span className="text-[11px] text-rose-700 font-semibold">Total due (Tk) as of today</span>
-              <div className="text-base font-extrabold text-rose-700 font-mono mt-1">
-                {formatTaka(report.totalDue)}
-              </div>
-            </div>
-
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-              <span className="text-[11px] text-teal-700 font-semibold">Stock (Admixture / Sealer)</span>
-              <div className="text-sm font-extrabold text-slate-900 font-mono mt-1">
-                {formatNumber(report.stockAdmixture)}L / {formatNumber(report.stockSealer)}L
+                {formatTaka(report.collectedAmount ?? report.collectionToday ?? 0)}
               </div>
             </div>
           </div>
 
-          {/* 5. Tomorrow Route & Problem Support */}
+          {/* 5. Problem Support */}
           <div className="space-y-3 pt-2">
-            <div className="bg-purple-50/60 border border-purple-200/80 rounded-xl p-4">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-purple-800 flex items-center gap-1.5 mb-1">
-                <Compass className="w-3.5 h-3.5" />
-                Tomorrow route / plan
-              </span>
-              <p className="text-xs text-slate-800 font-medium whitespace-pre-wrap leading-relaxed">
-                {report.tomorrowRoute || 'None provided'}
-              </p>
-            </div>
-
             <div className="bg-amber-50/60 border border-amber-200/80 rounded-xl p-4">
               <span className="text-[11px] uppercase tracking-wider font-bold text-amber-800 flex items-center gap-1.5 mb-1">
                 Problem / support needed

@@ -27,7 +27,10 @@ export default function ExecutiveDashboard({ user, reports, supervisor }) {
   const totalVisits = myReports.reduce((acc, r) => acc + (r.totalVisit || 0), 0);
   const totalAdmixture = myReports.reduce((acc, r) => acc + (r.orderAdmixture || 0), 0);
   const totalSealer = myReports.reduce((acc, r) => acc + (r.orderSealer || 0), 0);
-  const totalCollections = myReports.reduce((acc, r) => acc + (r.collectionToday || 0), 0);
+  const totalCollections = myReports.reduce(
+    (acc, r) => acc + (r.collectedAmount ?? r.collectionToday ?? 0),
+    0
+  );
   const totalDeliveriesVal = myReports.reduce((acc, r) => acc + (r.deliveryValue || 0), 0);
 
   // Recent 5 reports

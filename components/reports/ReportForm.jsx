@@ -42,23 +42,19 @@ export default function ReportForm({ initialData = null, isEdit = false }) {
   // 3. Orders
   const [orderAdmixture, setOrderAdmixture] = useState(initialData?.orderAdmixture ?? '');
   const [orderSealer, setOrderSealer] = useState(initialData?.orderSealer ?? '');
-  const [memoNo, setMemoNo] = useState(initialData?.memoNo ?? '');
 
   // 4. Deliveries
   const [deliveryAdmixture, setDeliveryAdmixture] = useState(initialData?.deliveryAdmixture ?? '');
   const [deliverySealer, setDeliverySealer] = useState(initialData?.deliverySealer ?? '');
   const [deliveryValue, setDeliveryValue] = useState(initialData?.deliveryValue ?? '');
 
-  // 5. Financials
-  const [collectionToday, setCollectionToday] = useState(initialData?.collectionToday ?? '');
-  const [totalDue, setTotalDue] = useState(initialData?.totalDue ?? '');
+  // 5. Collections (17. Collection From & 18. Collected Amount)
+  const [collectionFrom, setCollectionFrom] = useState(initialData?.collectionFrom || '');
+  const [collectedAmount, setCollectedAmount] = useState(
+    initialData?.collectedAmount ?? initialData?.collectionToday ?? ''
+  );
 
-  // 6. Stock Today
-  const [stockAdmixture, setStockAdmixture] = useState(initialData?.stockAdmixture ?? '');
-  const [stockSealer, setStockSealer] = useState(initialData?.stockSealer ?? '');
-
-  // 7. Planning & Remarks
-  const [tomorrowRoute, setTomorrowRoute] = useState(initialData?.tomorrowRoute || '');
+  // 6. Remarks / Problem Support
   const [problemSupport, setProblemSupport] = useState(initialData?.problemSupport || '');
 
   // State for validation and duplicate checking
@@ -117,7 +113,7 @@ export default function ReportForm({ initialData = null, isEdit = false }) {
       employeeRole: initialData?.employeeRole || user.role,
       date,
 
-      // 22 client fields preserved exactly:
+      // Daily report fields
       routeToday: routeToday.trim(),
       dealerVisit: num(dealerVisit),
       retailVisit: num(retailVisit),
@@ -129,20 +125,16 @@ export default function ReportForm({ initialData = null, isEdit = false }) {
       orderAdmixture: num(orderAdmixture),
       orderSealer: num(orderSealer),
       totalOrder, // auto-calculated
-      memoNo: num(memoNo),
 
       deliveryAdmixture: num(deliveryAdmixture),
       deliverySealer: num(deliverySealer),
       totalDelivery, // auto-calculated
       deliveryValue: num(deliveryValue),
 
-      collectionToday: num(collectionToday),
-      totalDue: num(totalDue),
+      collectionFrom: collectionFrom.trim(),
+      collectedAmount: num(collectedAmount),
+      collectionToday: num(collectedAmount), // compatibility fallback
 
-      stockAdmixture: num(stockAdmixture),
-      stockSealer: num(stockSealer),
-
-      tomorrowRoute: tomorrowRoute.trim(),
       problemSupport: problemSupport.trim(),
     };
 
@@ -326,7 +318,7 @@ export default function ReportForm({ initialData = null, isEdit = false }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">
                 Order Admixture (lit)
@@ -352,20 +344,6 @@ export default function ReportForm({ initialData = null, isEdit = false }) {
                 step="any"
                 value={orderSealer}
                 onChange={(e) => setOrderSealer(e.target.value)}
-                placeholder="0"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:bg-white focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1">
-                Memo (no.)
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={memoNo}
-                onChange={(e) => setMemoNo(e.target.value)}
                 placeholder="0"
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:bg-white focus:ring-2 focus:ring-blue-500"
               />
@@ -434,122 +412,62 @@ export default function ReportForm({ initialData = null, isEdit = false }) {
           </div>
         </div>
 
-        {/* Section 5: Financials & Stock Status (Light Theme) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Collection & Due */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-sm">
-            <div className="flex items-center gap-2 text-sm font-bold text-indigo-800 uppercase tracking-wider">
-              <DollarSign className="w-4 h-4 text-indigo-600" />
-              <span>5. Financial Collections & Dues</span>
-            </div>
-
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Collection today (Tk)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="any"
-                  value={collectionToday}
-                  onChange={(e) => setCollectionToday(e.target.value)}
-                  placeholder="0"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:bg-white focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Total due (Tk) as of today
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="any"
-                  value={totalDue}
-                  onChange={(e) => setTotalDue(e.target.value)}
-                  placeholder="0"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:bg-white focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-            </div>
+        {/* Section 5: Financial Collections (Light Theme) */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 space-y-4 shadow-sm">
+          <div className="flex items-center gap-2 text-sm font-bold text-emerald-800 uppercase tracking-wider">
+            <DollarSign className="w-4 h-4 text-emerald-600" />
+            <span>5. Financial Collections</span>
           </div>
 
-          {/* Warehouse / Distributor Stock */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-sm">
-            <div className="flex items-center gap-2 text-sm font-bold text-teal-800 uppercase tracking-wider">
-              <Package className="w-4 h-4 text-teal-600" />
-              <span>6. Closing Stock Status (Litres)</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                17. Collection From (Text)
+              </label>
+              <input
+                type="text"
+                value={collectionFrom}
+                onChange={(e) => setCollectionFrom(e.target.value)}
+                placeholder="e.g. M/S Bismillah Hardware, Mirpur 1"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+              />
             </div>
 
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Stock Admixture (lit) today
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="any"
-                  value={stockAdmixture}
-                  onChange={(e) => setStockAdmixture(e.target.value)}
-                  placeholder="0"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:bg-white focus:ring-2 focus:ring-teal-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Stock Sealer (lit) today
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="any"
-                  value={stockSealer}
-                  onChange={(e) => setStockSealer(e.target.value)}
-                  placeholder="0"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:bg-white focus:ring-2 focus:ring-teal-500"
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                18. Collected Amount (Tk)
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="any"
+                value={collectedAmount}
+                onChange={(e) => setCollectedAmount(e.target.value)}
+                placeholder="0"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 font-mono placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+              />
             </div>
           </div>
         </div>
 
-        {/* Section 6: Planning & Problems (Light Theme) */}
+        {/* Section 6: Operational Problems / Support Needed */}
         <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 space-y-4 shadow-sm">
           <div className="flex items-center gap-2 text-sm font-bold text-purple-800 uppercase tracking-wider">
             <Compass className="w-4 h-4 text-purple-600" />
-            <span>7. Tomorrow's Plan & Problem / Support Needed</span>
+            <span>6. Operational Problems / Support Needed</span>
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Tomorrow route / plan
-              </label>
-              <textarea
-                rows={2}
-                value={tomorrowRoute}
-                onChange={(e) => setTomorrowRoute(e.target.value)}
-                placeholder="e.g. Pallabi, Mirpur 12 and Section 6 dealer visits"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none transition-all"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Problem / support needed
-              </label>
-              <textarea
-                rows={3}
-                value={problemSupport}
-                onChange={(e) => setProblemSupport(e.target.value)}
-                placeholder="Describe any supply shortages, credit approval requirements, competitor activities, or technical support required..."
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none transition-all"
-              />
-            </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Problem / support needed
+            </label>
+            <textarea
+              rows={3}
+              value={problemSupport}
+              onChange={(e) => setProblemSupport(e.target.value)}
+              placeholder="Describe any supply shortages, client feedback, site issues, or management support required..."
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none transition-all"
+            />
           </div>
         </div>
 

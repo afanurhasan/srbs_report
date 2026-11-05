@@ -25,8 +25,10 @@ export default function AdminDashboard({ user, reports, allUsers }) {
   const totalAdmixture = reports.reduce((acc, r) => acc + (r.orderAdmixture || 0), 0);
   const totalSealer = reports.reduce((acc, r) => acc + (r.orderSealer || 0), 0);
   const totalDeliveriesVal = reports.reduce((acc, r) => acc + (r.deliveryValue || 0), 0);
-  const totalCollections = reports.reduce((acc, r) => acc + (r.collectionToday || 0), 0);
-  const totalDues = reports.reduce((acc, r) => acc + (r.totalDue || 0), 0);
+  const totalCollections = reports.reduce(
+    (acc, r) => acc + (r.collectedAmount ?? r.collectionToday ?? 0),
+    0
+  );
 
   // Role counts
   const roleCounts = {

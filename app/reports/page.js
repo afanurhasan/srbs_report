@@ -448,20 +448,15 @@ export default function ReportsListPage() {
     const orderSlr = monthlyReports.reduce((sum, r) => sum + (Number(r.orderSealer) || 0), 0);
     const totalOrder = monthlyReports.reduce((sum, r) => sum + (Number(r.totalOrder) || 0), 0);
 
-    const memoCount = monthlyReports.reduce((sum, r) => sum + (Number(r.memoNo) || 0), 0);
-
     const delAdm = monthlyReports.reduce((sum, r) => sum + (Number(r.deliveryAdmixture) || 0), 0);
     const delSlr = monthlyReports.reduce((sum, r) => sum + (Number(r.deliverySealer) || 0), 0);
     const totalDelivery = monthlyReports.reduce((sum, r) => sum + (Number(r.totalDelivery) || 0), 0);
 
     const deliveryVal = monthlyReports.reduce((sum, r) => sum + (Number(r.deliveryValue) || 0), 0);
-    const collected = monthlyReports.reduce((sum, r) => sum + (Number(r.collectionToday) || 0), 0);
-
-    // Latest closing status in the month
-    const latestRep = monthlyReports[monthlyReports.length - 1];
-    const latestDue = latestRep ? latestRep.totalDue : 0;
-    const latestStockAdm = latestRep ? latestRep.stockAdmixture : 0;
-    const latestStockSlr = latestRep ? latestRep.stockSealer : 0;
+    const collected = monthlyReports.reduce(
+      (sum, r) => sum + (Number(r.collectedAmount ?? r.collectionToday) || 0),
+      0
+    );
 
     return {
       daysReported: monthlyReports.length,
@@ -474,19 +469,15 @@ export default function ReportsListPage() {
       orderAdm,
       orderSlr,
       totalOrder,
-      memoCount,
       delAdm,
       delSlr,
       totalDelivery,
       deliveryVal,
       collected,
-      latestDue,
-      latestStockAdm,
-      latestStockSlr,
     };
   }, [monthlyReports]);
 
-  // Export 22-column CSV for this month
+  // Export CSV for this month
   const handleExportCSV = () => {
     if (monthlyReports.length === 0) return;
 
@@ -502,16 +493,12 @@ export default function ReportsListPage() {
       'Order Admixture (lit)',
       'Order Sealer (lit)',
       'Total order (lit)',
-      'Memo (no.)',
       'Delivery Admixture (lit)',
       'Delivery Sealer (lit)',
       'Total delivery (lit)',
       'Delivery value (Tk)',
-      'Collection today (Tk)',
-      'Total due (Tk) as of today',
-      'Stock Admixture (lit) today',
-      'Stock Sealer (lit) today',
-      'Tomorrow route / plan',
+      'Collection From',
+      'Collected Amount (Tk)',
       'Problem / support needed',
     ];
 
@@ -527,16 +514,12 @@ export default function ReportsListPage() {
       r.orderAdmixture || 0,
       r.orderSealer || 0,
       r.totalOrder || 0,
-      r.memoNo || 0,
       r.deliveryAdmixture || 0,
       r.deliverySealer || 0,
       r.totalDelivery || 0,
       r.deliveryValue || 0,
-      r.collectionToday || 0,
-      r.totalDue || 0,
-      r.stockAdmixture || 0,
-      r.stockSealer || 0,
-      `"${r.tomorrowRoute || ''}"`,
+      `"${r.collectionFrom || ''}"`,
+      r.collectedAmount ?? r.collectionToday ?? 0,
       `"${r.problemSupport || ''}"`,
     ]);
 
@@ -554,16 +537,12 @@ export default function ReportsListPage() {
         monthlyTotals.orderAdm,
         monthlyTotals.orderSlr,
         monthlyTotals.totalOrder,
-        monthlyTotals.memoCount,
         monthlyTotals.delAdm,
         monthlyTotals.delSlr,
         monthlyTotals.totalDelivery,
         monthlyTotals.deliveryVal,
-        monthlyTotals.collected,
-        monthlyTotals.latestDue,
-        monthlyTotals.latestStockAdm,
-        monthlyTotals.latestStockSlr,
         '""',
+        monthlyTotals.collected,
         '""',
       ]);
     }
@@ -939,20 +918,20 @@ export default function ReportsListPage() {
             </div>
 
             <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+              <span className="text-[11px] text-amber-800 font-semibold flex items-center gap-1.5">
+                <Truck className="w-3.5 h-3.5 text-amber-600" /> Delivery Value (Tk)
+              </span>
+              <div className="text-lg font-black text-amber-900 mt-1">
+                {formatTaka(monthlyTotals.deliveryVal)}
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
               <span className="text-[11px] text-emerald-800 font-semibold flex items-center gap-1.5">
                 <DollarSign className="w-3.5 h-3.5 text-emerald-600" /> Collected (Tk)
               </span>
               <div className="text-lg font-black text-emerald-800 mt-1">
                 {formatTaka(monthlyTotals.collected)}
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
-              <span className="text-[11px] text-amber-800 font-semibold flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-amber-600" /> Closing Due (Tk)
-              </span>
-              <div className="text-lg font-black text-amber-800 mt-1">
-                {formatTaka(monthlyTotals.latestDue)}
               </div>
             </div>
           </div>
@@ -982,10 +961,10 @@ export default function ReportsListPage() {
           </div>
         </div>
 
-        {/* 22-Column Full Month Day-to-Day Table */}
+        {/* Full Month Day-to-Day Table */}
         <div className="bg-white border border-slate-200 rounded-b-2xl overflow-hidden shadow-sm -mt-6">
           <div className="overflow-x-auto max-h-[700px] relative">
-            <table className="w-full text-left text-xs text-slate-700 border-collapse min-w-[2400px]">
+            <table className="w-full text-left text-xs text-slate-700 border-collapse min-w-[1950px]">
               <thead className="bg-slate-100/90 backdrop-blur sticky top-0 z-20 text-slate-700 text-[11px] font-bold uppercase tracking-wider border-b border-slate-300 shadow-2xs">
                 <tr>
                   {isExecutive && (
@@ -1030,9 +1009,6 @@ export default function ReportsListPage() {
                   <th className="py-3 px-3.5 text-right bg-blue-50/80 text-blue-900 border-r border-slate-200 min-w-[130px]">
                     11. Total order (L)
                   </th>
-                  <th className="py-3 px-3 text-center border-r border-slate-200 min-w-[90px]">
-                    12. Memo (no.)
-                  </th>
                   <th className="py-3 px-3 text-right border-r border-slate-200 min-w-[130px]">
                     13. Deliv Adm (L)
                   </th>
@@ -1045,23 +1021,14 @@ export default function ReportsListPage() {
                   <th className="py-3 px-3.5 text-right border-r border-slate-200 min-w-[145px]">
                     16. Delivery val (Tk)
                   </th>
-                  <th className="py-3 px-3.5 text-right text-emerald-800 bg-emerald-50/50 border-r border-slate-200 min-w-[140px]">
-                    17. Collected (Tk)
+                  <th className="py-3 px-3.5 border-r border-slate-200 min-w-[200px]">
+                    17. Collection From
                   </th>
-                  <th className="py-3 px-3.5 text-right text-amber-900 bg-amber-50/40 border-r border-slate-200 min-w-[150px]">
-                    18. Total due (Tk)
-                  </th>
-                  <th className="py-3 px-3 text-right border-r border-slate-200 min-w-[135px]">
-                    19. Stock Adm (L)
-                  </th>
-                  <th className="py-3 px-3 text-right border-r border-slate-200 min-w-[135px]">
-                    20. Stock Slr (L)
-                  </th>
-                  <th className="py-3 px-3.5 border-r border-slate-200 min-w-[220px]">
-                    21. Tomorrow route / plan
+                  <th className="py-3 px-3.5 text-right text-emerald-800 bg-emerald-50/50 border-r border-slate-200 min-w-[145px]">
+                    18. Collected Amount (Tk)
                   </th>
                   <th className="py-3 px-3.5 border-r border-slate-200 min-w-[240px]">
-                    22. Problem / support
+                    Problem / support
                   </th>
                   {!isExecutive && (
                     <th className="py-3 px-3 text-center min-w-[90px]">Actions</th>
@@ -1073,7 +1040,7 @@ export default function ReportsListPage() {
                 {monthlyReports.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={23}
+                      colSpan={19}
                       className="py-16 text-center text-slate-500 bg-white"
                     >
                       <FileText className="w-10 h-10 text-slate-300 mx-auto mb-3" />
@@ -1195,11 +1162,6 @@ export default function ReportsListPage() {
                           {formatNumber(r.totalOrder || 0)} L
                         </td>
 
-                        {/* 12. Memo No */}
-                        <td className="py-3 px-3 text-center font-mono font-bold text-slate-800 border-r border-slate-200">
-                          {r.memoNo || 0}
-                        </td>
-
                         {/* 13. Delivery Admixture */}
                         <td className="py-3 px-3 text-right font-mono border-r border-slate-200">
                           {formatNumber(r.deliveryAdmixture || 0)}
@@ -1220,33 +1182,24 @@ export default function ReportsListPage() {
                           {formatTaka(r.deliveryValue || 0)}
                         </td>
 
-                        {/* 17. Collection today (Tk) */}
+                        {/* 17. Collection From */}
+                        <td
+                          className="py-3 px-3.5 text-slate-800 border-r border-slate-200 max-w-xs truncate font-medium"
+                          title={r.collectionFrom}
+                        >
+                          {r.collectionFrom || '-'}
+                        </td>
+
+                        {/* 18. Collected Amount (Tk) */}
                         <td className="py-3 px-3.5 text-right font-mono font-bold text-emerald-700 bg-emerald-50/30 border-r border-slate-200">
-                          {formatTaka(r.collectionToday || 0)}
+                          {formatTaka(r.collectedAmount ?? r.collectionToday ?? 0)}
                         </td>
 
-                        {/* 18. Total due (Tk) */}
-                        <td className="py-3 px-3.5 text-right font-mono font-bold text-amber-800 bg-amber-50/20 border-r border-slate-200">
-                          {formatTaka(r.totalDue || 0)}
-                        </td>
-
-                        {/* 19. Stock Admixture */}
-                        <td className="py-3 px-3 text-right font-mono text-slate-700 border-r border-slate-200">
-                          {formatNumber(r.stockAdmixture || 0)} L
-                        </td>
-
-                        {/* 20. Stock Sealer */}
-                        <td className="py-3 px-3 text-right font-mono text-slate-700 border-r border-slate-200">
-                          {formatNumber(r.stockSealer || 0)} L
-                        </td>
-
-                        {/* 21. Tomorrow route / plan */}
-                        <td className="py-3 px-3.5 text-slate-600 border-r border-slate-200 max-w-xs truncate" title={r.tomorrowRoute}>
-                          {r.tomorrowRoute || '-'}
-                        </td>
-
-                        {/* 22. Problem / support needed */}
-                        <td className="py-3 px-3.5 text-slate-600 border-r border-slate-200 max-w-xs truncate" title={r.problemSupport}>
+                        {/* Problem / support needed */}
+                        <td
+                          className="py-3 px-3.5 text-slate-600 border-r border-slate-200 max-w-xs truncate"
+                          title={r.problemSupport}
+                        >
                           {r.problemSupport || '-'}
                         </td>
 
@@ -1330,9 +1283,6 @@ export default function ReportsListPage() {
                     <td className="py-3 px-3.5 text-right font-mono text-blue-900 bg-blue-100/80 border-r border-slate-300">
                       {formatNumber(monthlyTotals.totalOrder)} L
                     </td>
-                    <td className="py-3 px-3 text-center font-mono border-r border-slate-300">
-                      {monthlyTotals.memoCount}
-                    </td>
                     <td className="py-3 px-3 text-right font-mono border-r border-slate-300">
                       {formatNumber(monthlyTotals.delAdm)}
                     </td>
@@ -1345,20 +1295,11 @@ export default function ReportsListPage() {
                     <td className="py-3 px-3.5 text-right font-mono border-r border-slate-300">
                       {formatTaka(monthlyTotals.deliveryVal)}
                     </td>
-                    <td className="py-3 px-3.5 text-right font-mono text-emerald-900 bg-emerald-100/80 border-r border-slate-300">
-                      {formatTaka(monthlyTotals.collected)}
-                    </td>
-                    <td className="py-3 px-3.5 text-right font-mono text-amber-900 bg-amber-100/80 border-r border-slate-300">
-                      {formatTaka(monthlyTotals.latestDue)}
-                    </td>
-                    <td className="py-3 px-3 text-right font-mono border-r border-slate-300">
-                      {formatNumber(monthlyTotals.latestStockAdm)} L
-                    </td>
-                    <td className="py-3 px-3 text-right font-mono border-r border-slate-300">
-                      {formatNumber(monthlyTotals.latestStockSlr)} L
-                    </td>
                     <td className="py-3 px-3.5 text-center text-slate-500 border-r border-slate-300 font-normal">
                       &mdash;
+                    </td>
+                    <td className="py-3 px-3.5 text-right font-mono text-emerald-900 bg-emerald-100/80 border-r border-slate-300">
+                      {formatTaka(monthlyTotals.collected)}
                     </td>
                     <td className="py-3 px-3.5 text-center text-slate-500 border-r border-slate-300 font-normal">
                       &mdash;
@@ -1433,7 +1374,7 @@ export default function ReportsListPage() {
               {/* Orders & Deliveries */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200 space-y-1.5 text-xs">
-                  <span className="font-bold text-blue-900 block">Orders & Memo</span>
+                  <span className="font-bold text-blue-900 block">Orders</span>
                   <div className="flex justify-between">
                     <span className="text-slate-600">Order Admixture:</span>
                     <span className="font-mono font-bold text-slate-900">{formatNumber(modalReport.orderAdmixture)} L</span>
@@ -1445,10 +1386,6 @@ export default function ReportsListPage() {
                   <div className="flex justify-between border-t border-blue-200 pt-1">
                     <span className="font-bold text-blue-900">Total Order:</span>
                     <span className="font-mono font-black text-blue-900">{formatNumber(modalReport.totalOrder)} L</span>
-                  </div>
-                  <div className="flex justify-between pt-1">
-                    <span className="text-slate-600">Memos Issued:</span>
-                    <span className="font-mono font-bold text-slate-900">{modalReport.memoNo}</span>
                   </div>
                 </div>
 
@@ -1473,38 +1410,23 @@ export default function ReportsListPage() {
                 </div>
               </div>
 
-              {/* Collections, Due & Stocks */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-                <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
-                  <span className="text-emerald-800 block text-[10px] font-bold">Collected Today</span>
-                  <span className="font-mono font-black text-emerald-800 text-sm">{formatTaka(modalReport.collectionToday)}</span>
+              {/* Financial Collections */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-slate-500 block text-[11px] font-semibold">17. Collection From</span>
+                  <span className="font-bold text-slate-900 text-sm mt-0.5 block">{modalReport.collectionFrom || 'Not specified'}</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200">
-                  <span className="text-amber-800 block text-[10px] font-bold">Total Due Today</span>
-                  <span className="font-mono font-black text-amber-800 text-sm">{formatTaka(modalReport.totalDue)}</span>
-                </div>
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-slate-500 block text-[10px]">Stock Admixture</span>
-                  <span className="font-mono font-bold text-slate-900 text-sm">{formatNumber(modalReport.stockAdmixture)} L</span>
-                </div>
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-slate-500 block text-[10px]">Stock Sealer</span>
-                  <span className="font-mono font-bold text-slate-900 text-sm">{formatNumber(modalReport.stockSealer)} L</span>
+                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                  <span className="text-emerald-800 block text-[11px] font-semibold">18. Collected Amount</span>
+                  <span className="font-mono font-black text-emerald-800 text-base mt-0.5 block">
+                    {formatTaka(modalReport.collectedAmount ?? modalReport.collectionToday ?? 0)}
+                  </span>
                 </div>
               </div>
 
-              {/* Comments / Tomorrow Route / Problem Support */}
-              <div className="space-y-3 pt-2">
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
-                    Tomorrow Route / Plan
-                  </span>
-                  <p className="text-xs text-slate-800 font-medium">
-                    {modalReport.tomorrowRoute || 'No specific route plan entered.'}
-                  </p>
-                </div>
-
-                <div className="p-3 bg-amber-50/60 rounded-xl border border-amber-200">
+              {/* Comments / Problem Support */}
+              <div className="pt-1">
+                <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 block mb-1">
                     Problem / Support Needed
                   </span>

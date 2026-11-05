@@ -51,8 +51,10 @@ export default function ManagerDashboard({ user, reports, subordinateUsers }) {
   const totalVisits = subordinateReports.reduce((acc, r) => acc + (r.totalVisit || 0), 0);
   const totalAdmixture = subordinateReports.reduce((acc, r) => acc + (r.orderAdmixture || 0), 0);
   const totalSealer = subordinateReports.reduce((acc, r) => acc + (r.orderSealer || 0), 0);
-  const totalCollections = subordinateReports.reduce((acc, r) => acc + (r.collectionToday || 0), 0);
-  const totalDueAmount = subordinateReports.reduce((acc, r) => acc + (r.totalDue || 0), 0);
+  const totalCollections = subordinateReports.reduce(
+    (acc, r) => acc + (r.collectedAmount ?? r.collectionToday ?? 0),
+    0
+  );
 
   // Recent 5 reports
   const recentReports = [...subordinateReports]
