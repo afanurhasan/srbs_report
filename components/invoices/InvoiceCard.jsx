@@ -83,7 +83,7 @@ export default function InvoiceCard({ invoice, className = '' }) {
         fontFamily: 'Arial, Helvetica, sans-serif',
       }}
     >
-      <div className="flex flex-col justify-between min-h-[780px] print:min-h-screen">
+      <div className="flex flex-col justify-between min-h-[680px] print:min-h-0 print:block">
         {/* Top Header Block */}
         <div>
           {/* Header */}
@@ -92,9 +92,16 @@ export default function InvoiceCard({ invoice, className = '' }) {
               <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 flex items-center justify-center p-1 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/navlogo.jpeg"
+                  src="/inv%20logo.jpeg"
                   alt="SRBS Logo"
                   className="w-full h-full object-contain"
+                  onError={(e) => {
+                    if (e.target.src.includes('inv%20logo.jpeg')) {
+                      e.target.src = '/invlogo.jpeg';
+                    } else {
+                      e.target.src = '/navlogo.jpeg';
+                    }
+                  }}
                 />
               </div>
               <div>
@@ -116,8 +123,7 @@ export default function InvoiceCard({ invoice, className = '' }) {
 
           {/* Separator with tagline */}
           <div className="my-3.5 relative">
-            <div className="h-[3px] w-28" style={{ backgroundColor: '#A83232' }} />
-            <div className="flex items-center -mt-[2px]">
+            <div className="flex items-center">
               <div className="flex-1 border-t border-slate-400" />
               <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-white pl-2.5 text-slate-700 whitespace-nowrap">
                 We Value Your Investment
@@ -298,7 +304,7 @@ export default function InvoiceCard({ invoice, className = '' }) {
         </div>
 
         {/* Footer & Signatures Block */}
-        <div className="mt-auto pt-8">
+        <div className="mt-8 pt-4 print:mt-12">
           {/* Signatures */}
           <div className="flex justify-between items-end gap-2 px-2 text-center text-xs text-slate-800">
             <div className="w-32 sm:w-40 border-t-2 border-slate-900 pt-1 font-semibold text-[11px] sm:text-xs">
@@ -309,31 +315,6 @@ export default function InvoiceCard({ invoice, className = '' }) {
             </div>
             <div className="w-32 sm:w-40 border-t-2 border-slate-900 pt-1 font-semibold text-[11px] sm:text-xs">
               Prepared By
-            </div>
-          </div>
-
-          {/* Bottom Bar Container */}
-          <div className="relative mt-5 pt-1">
-            <div
-              className="absolute top-0 left-0 h-[3px] w-28 sm:w-36"
-              style={{ backgroundColor: '#A83232' }}
-            />
-            <div
-              className="absolute top-0 right-0 h-[3px] w-28 sm:w-36"
-              style={{ backgroundColor: '#A83232' }}
-            />
-            <div className="border-t border-slate-400 mt-[2px]" />
-
-            <div className="flex flex-wrap items-center justify-between text-[10px] sm:text-[11px] text-slate-600 font-medium pt-2 gap-2">
-              <div className="flex items-center gap-1 font-mono">
-                <span>🌐</span> www.srbsbd.com
-              </div>
-              <div className="flex items-center gap-1 font-mono">
-                <span>✉️</span> info@srbsbd.com
-              </div>
-              <div className="flex items-center gap-1 font-mono">
-                <span>📞</span> +8809611901356
-              </div>
             </div>
           </div>
         </div>

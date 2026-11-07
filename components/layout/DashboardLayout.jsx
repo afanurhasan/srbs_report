@@ -10,23 +10,27 @@ export default function DashboardLayout({ children, allowedRoles = null }) {
 
   return (
     <AuthGuard allowedRoles={allowedRoles}>
-      <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col">
+      <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col print:min-h-0 print:bg-white">
         {/* Global Header */}
-        <AppHeader onToggleSidebar={() => setSidebarOpen((prev) => !prev)} />
+        <div className="print:hidden">
+          <AppHeader onToggleSidebar={() => setSidebarOpen((prev) => !prev)} />
+        </div>
 
         {/* Main Body Shell */}
-        <div className="flex-1 flex">
+        <div className="flex-1 flex print:block">
           {/* Sidebar */}
-          <AppSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <div className="print:hidden">
+            <AppSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          </div>
 
           {/* Content Area (offset on desktop for 64px/w-64 sidebar) */}
-          <main className="flex-1 lg:pl-64 flex flex-col min-w-0 bg-slate-100">
-            <div className="flex-1 p-3 sm:p-5 lg:p-8 max-w-7xl w-full mx-auto">
+          <main className="flex-1 lg:pl-64 flex flex-col min-w-0 bg-slate-100 print:bg-white print:p-0 print:m-0 print:pl-0">
+            <div className="flex-1 p-3 sm:p-5 lg:p-8 max-w-7xl w-full mx-auto print:p-0 print:m-0 print:max-w-none">
               {children}
             </div>
             
             {/* Clean Light Footer */}
-            <footer className="border-t border-slate-200 px-4 sm:px-6 py-3.5 text-center text-xs text-slate-500 bg-white">
+            <footer className="print:hidden border-t border-slate-200 px-4 sm:px-6 py-3.5 text-center text-xs text-slate-500 bg-white">
               SRBS Admixture and Paint Company &bull; Sales & Reporting System
             </footer>
           </main>

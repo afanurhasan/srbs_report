@@ -13,7 +13,6 @@ import { getTodayString } from '@/lib/utils';
 import {
   FileText,
   Save,
-  Printer,
   RotateCcw,
   Plus,
   Trash2,
@@ -312,11 +311,6 @@ export default function CreateInvoicePage() {
     }
   };
 
-  // Trigger print
-  const handlePrint = () => {
-    window.print();
-  };
-
   // Admin access protection
   if (user && user.role !== ROLES.ADMIN) {
     return (
@@ -372,15 +366,6 @@ export default function CreateInvoicePage() {
             >
               <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
               <span>New / Reset</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-slate-900/20 transition-all"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print Invoice</span>
             </button>
 
             <button

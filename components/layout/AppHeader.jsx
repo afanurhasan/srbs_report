@@ -27,7 +27,7 @@ export default function AppHeader({ onToggleSidebar }) {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 border-b border-slate-200 backdrop-blur-md px-4 lg:px-8 h-16 flex items-center shadow-2xs lg:pl-[272px]">
+    <header className="print:hidden sticky top-0 z-30 bg-white/95 border-b border-slate-200 backdrop-blur-md px-4 lg:px-8 h-16 flex items-center shadow-2xs lg:pl-[272px]">
       <div className="flex items-center justify-between gap-4 w-full">
         {/* Mobile Header elements (Hidden on Desktop because Sidebar has Brand) */}
         <div className="flex items-center gap-3 lg:hidden">
